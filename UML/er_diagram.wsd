@@ -1,0 +1,174 @@
+' ==========================
+' ER DIAGRAM
+' ==========================
+@startuml
+left to right direction
+!theme plain
+
+entity "User" {
+  + userId: String <<PK>>
+  --
+  username: String
+  email: String
+  password: String
+  gender: String
+  cigarettesPerDay: Integer
+  cigarettesPerPack: Integer
+  costPerPack: Double
+  smokingYears: Integer
+  userRank: Integer
+  userXP: Integer
+  quitDate: Timestamp
+  questionnaireCompleted: Boolean
+  hasRated: Boolean
+  socialTag: String
+  whySmoke: String
+  feelWhenSmoking: String
+  typeOfSmoker: String
+  whyQuit: String
+  triedQuitMethods: String
+  emotionalMeaning: String
+  cravingSituations: String
+  confidenceLevel: String
+  smokingEnvironment: String
+  biggestFear: String
+  biggestMotivation: String
+  completedAchievements: String[]
+  friendsList: String[]
+}
+
+entity "CravingLog" {
+  + logId: String <<PK>>
+  + userId: String <<FK>>
+  --
+  coping_method: String
+  description: String
+  intensity: String <<ENUM('Mild', 'Moderate', 'Strong', 'Extreme')>>
+  timestamp: Timestamp
+  trigger: String
+}
+
+entity "GlobalChatRoom" {
+  + roomId: String <<PK>>
+  --
+  roomNumber: Integer
+  createdAt: Timestamp
+}
+
+entity "ChatMessage" {
+  + messageId: String <<PK>>
+  + roomId: String <<FK>>
+  + senderId: String <<FK>>
+  --
+  message: String
+  senderName: String
+  timestamp: Timestamp
+}
+
+entity "RoomMember" {
+  + membershipId: String <<PK>>
+  + roomId: String <<FK>>
+  + userId: String <<FK>>
+  --
+  username: String
+  joinedAt: Timestamp
+}
+
+entity "Rating" {
+  + ratingId: String <<PK>>
+  + userId: String <<FK>>
+  --
+  functionalityRating: Integer
+  helpfulnessRating: Integer
+  timestamp: Timestamp
+}
+
+entity "Achievement" {
+  + achievementId: String <<PK>>
+  --
+  title: String
+  description: String
+  iconPath: String
+  xp: Integer
+  targetValue: Double
+  type: String <<ENUM('TIME_BASED', 'MONEY_SAVED', 'CIGARETTES_AVOIDED', 'HEALTH_MILESTONE')>>
+}
+
+entity "UserAchievement" {
+  + userAchievementId: String <<PK>>
+  + userId: String <<FK>>
+  + achievementId: String <<FK>>
+  --
+  progress: Double
+  completed: Boolean
+  completedDate: Timestamp
+}
+
+' User relationships
+User ||--o{ CravingLog : "logs"
+User ||--o{ Rating : "submits"
+User ||--o{ UserAchievement : "has"
+User ||--o{ RoomMember : "is member of"
+
+' GlobalChatRoom relationships
+GlobalChatRoom ||--o{ ChatMessage : "contains"
+GlobalChatRoom ||--o{ RoomMember : "has members"
+
+' ChatMessage relationships
+ChatMessage }|--|| GlobalChatRoom : "belongs to"
+ChatMessage }|--|| User : "sent by"
+
+' RoomMember relationships
+RoomMember }|--|| GlobalChatRoom : "member of"
+RoomMember }|--|| User : "is user"
+
+' Rating relationships
+Rating }|--|| User : "submitted by"
+
+' Achievement relationships
+Achievement ||--o{ UserAchievement : "earned by"
+UserAchievement }|--|| User : "belongs to"
+
+' Enums
+enum "CravingIntensity" {
+  Mild
+  Moderate
+  Strong
+  Extreme
+}
+
+enum "AchievementType" {
+  TIME_BASED
+  MONEY_SAVED
+  CIGARETTES_AVOIDED
+  HEALTH_MILESTONE
+}
+
+note right of User
+  Firestore collection with:
+  - Array fields: completedAchievements, friendsList
+  - All user profile and smoking data
+  - Questionnaire responses
+end note
+
+note right of CravingLog
+  Firestore collection:
+  - Document ID as logId
+  - Fields: coping_method, description,
+  intensity, timestamp, trigger, userId
+end note
+
+note right of GlobalChatRoom
+  Firestore collection with subcollections:
+  - messages (ChatMessage)
+  - members (RoomMember)
+  - Room metadata
+end note
+
+note right of Rating
+  Firestore collection:
+  - functionalityRating, helpfulnessRating
+  - timestamp, userId
+end note
+
+@enduml

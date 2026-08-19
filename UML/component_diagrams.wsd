@@ -1,0 +1,140 @@
+' ==========================
+' COMPONENT DIAGRAM
+' ==========================
+@startuml
+left to right direction
+title Component Diagram
+
+package "Flutter Mobile App (Client)" {
+  
+  package "UI Layer (Screens)" {
+    [Splash Screen]
+    [Welcome Screen]
+    [Login/Signup Screen]
+    [First-Time Questionnaire Screen]
+    [Home Screen]
+    [Daily Tips Screen]
+    [Health Progress Screen]
+    [Breathing Techniques Screen]
+    [Mini-Games Screen]
+    [Achievements Screen]
+    [Leaderboard Screen]
+    [Friends Screen]
+    [Cravings Log Screen]
+    [Talk to Someone Screen]
+    [Settings/Profile Screen]
+  }
+  
+  package "State Management (Providers)" {
+    [Home Screen Provider]
+    [User Provider]
+    [Leaderboard Provider]
+    [Achievements Provider]
+    [Notification Provider]
+    [Daily Tips Provider]
+    [Chatbot Provider]
+    [Auth Provider]
+    [Progress Provider]
+  }
+
+  package "Local Services" {
+    [Firestore Service]
+    [Auth Service]
+    [Notification Manager]
+    [Chatbot API Service]
+    [Mock Data Service]
+  }
+
+  ' Connections
+  [UI Layer (Screens)] --> [State Management (Providers)]
+  [State Management (Providers)] --> [Local Services]
+}
+
+package "Backend Services" {
+  [Firebase Authentication]
+  [Firebase Firestore]
+  [Firebase Cloud Messaging]
+  package "Chatbot System (LangChain + RAG)" {
+    [Chatbot API Service]
+    [LangChain Orchestrator]
+    [Retriever Module]
+    [Vector Database (Embeddings)]
+    [LLM Model Endpoint]
+  }
+}
+
+' Communication paths
+[Auth Service] --> [Firebase Authentication]
+[Firestore Service] --> [Firebase Firestore]
+[Notification Manager] --> [Firebase Cloud Messaging]
+[Chatbot API Service] --> [Chatbot System (LangChain + RAG)]
+
+' Data Flows
+[Auth Provider] --> [Auth Service]
+[User Provider] --> [Firestore Service]
+[Leaderboard Provider] --> [Firestore Service]
+[Achievements Provider] --> [Firestore Service]
+[Daily Tips Provider] --> [Firestore Service]
+[Progress Provider] --> [Firestore Service]
+[Home Screen Provider] --> [Firestore Service]
+[Chatbot Provider] --> [Chatbot API Service]
+[Notification Provider] --> [Notification Manager]
+
+@enduml
+
+
+
+' ==========================
+' COMPONENT DIAGRAM CHATBOT
+' ==========================
+@startuml
+title Component Diagram - Chatbot Subsystem
+
+component "Flutter App" as APP {
+  [UI Layer] 
+  [Chat Screen]
+  [HTTP Client]
+}
+
+component "ngrok Tunnel" as NG
+
+component "FastAPI Backend" as API {
+  [API Gateway (/chat)]
+  [Request Validator]
+  [Session Manager]
+}
+
+component "LangChain Orchestrator" as LC {
+  [Prompt Builder]
+  [Conversation Manager]
+  [RAG Pipeline]
+  [Fallback Handler]
+}
+
+component "Semantic Classifier" as SEM
+component "Vector Store\n(ChromaDB)" as VS
+component "User Memory\n(Buffer/Store)" as MEM
+component "Firebase\n(User Profiles)" as FB
+component "LLM Provider\n(OpenRouter/Groq)" as LLM
+component "Web Search API\n(Serper)" as WS
+
+APP --> NG : HTTPS POST /chat
+NG --> API : Forwarded request
+API --> FB : Load user profile
+API --> MEM : Load conversation memory
+API --> SEM : Classify intent
+SEM --> API : Relevant / Not Relevant
+API --> LC : Forward message + profile + memory
+LC --> VS : Retrieve top-k docs
+VS --> LC : Docs
+LC --> LLM : Query with prompt
+LLM --> LC : Draft answer
+LC --> WS : (if fallback needed) Search snippets
+WS --> LC : Snippets
+LC --> MEM : Append new exchange  
+MEM --> API : Confirmation
+API --> NG : JSON reply
+NG --> APP : Response
+APP --> [Chat Screen] : Render reply
+
+@enduml

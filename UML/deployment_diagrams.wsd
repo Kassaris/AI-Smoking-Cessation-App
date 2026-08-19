@@ -1,0 +1,128 @@
+
+' ==========================
+' DEPLOYMENT DIAGRAM
+' ==========================
+
+@startuml
+left to right direction
+title Deployment Diagram
+
+node "User Device (Smartphone)" {
+  node "Flutter App" {
+    [UI Layer (Screens)]
+    [Provider State Management]
+    [Local Cache (SharedPreferences/SQLite)]
+    [Notification Manager]
+    [Mini-Games Engine (Local)]
+  }
+}
+
+node "Firebase Cloud" {
+  node "Firebase Authentication" {
+    [Email/Password Auth]
+    [Google OAuth Integration]
+    [Session Management]
+  }
+  
+  node "Firestore Database" {
+    [Users Collection]
+    [Achievements Collection]
+    [Leaderboard Collection]
+    [Friends Collection]
+    [Cravings Logs Collection]
+    [Daily Tips Collection]
+  }
+  
+  node "Firebase Cloud Messaging" {
+    [Push Notifications Service]
+    [Scheduled Reminders]
+  }
+}
+
+node "External Services" {
+  node "Chatbot Backend (LangChain + RAG)" {
+    [LangChain Orchestrator]
+    [Retriever]
+    [Vector Store / Embeddings DB]
+    [LLM API Endpoint (GroqAI, OpenAI, etc.)]
+  }
+}
+
+
+' Communication paths
+[Flutter App] --> [Email/Password Auth] : Login/Signup
+[Flutter App] --> [Session Management] : Token Validation
+[Flutter App] --> [Users Collection] : CRUD Profile Data
+[Flutter App] --> [Achievements Collection] : Track/Unlock Achievements
+[Flutter App] --> [Leaderboard Collection] : Submit/View Scores
+[Flutter App] --> [Friends Collection] : Manage Friendships
+[Flutter App] --> [Cravings Logs Collection] : Save/View Craving Entries
+[Flutter App] --> [Daily Tips Collection] : Retrieve Daily Motivation
+
+[Flutter App] --> [Push Notifications Service] : Receive Motivational Alerts
+[Flutter App] --> [Scheduled Reminders] : Craving Timers & Health Milestones
+
+[Flutter App] --> [Chatbot NLP Engine] : User Questions
+[Chatbot NLP Engine] --> [Fallback Handling] : Error/Offline Management
+
+@enduml
+
+
+' ==========================
+' DEPLOYMENT DIAGRAM CHATBOT
+' ==========================
+
+
+@startuml
+title Deployment Diagram - Chatbot Subsystem
+
+node "Mobile Device\n(Android/iOS)" as MOBILE {
+  artifact "Flutter App" as APP
+}
+
+node "ngrok Edge Server\n(Public HTTPS Endpoint)" as NGROK
+
+node "Backend Server\n(Docker Container)" as BACKEND {
+  node "FastAPI Service" as FASTAPI {
+    artifact "API Gateway (/chat)"
+    artifact "Session Manager"
+  }
+
+  node "LangChain Engine" as LC {
+    artifact "Conversation Manager"
+    artifact "Prompt Builder"
+    artifact "RAG Pipeline"
+    artifact "Fallback Handler"
+  }
+
+  database "ChromaDB\n(Vector Store)" as VS
+  database "Memory Store\n(User Session Data)" as MEM
+}
+
+cloud "Firebase Cloud" as FIREBASE {
+  database "User Profiles\n(Auth, Quit Data, Stats)" as FB
+}
+
+cloud "LLM Provider" as LLM {
+  artifact "Groq / OpenRouter API"
+}
+
+cloud "Web Search API" as SERPER {
+  artifact "Serper.dev"
+}
+
+MOBILE --> NGROK : HTTPS Request (/chat)
+NGROK --> FASTAPI : Forwarded Request
+FASTAPI --> FB : Retrieve user profile
+FASTAPI --> MEM : Load/Update user memory
+FASTAPI --> LC : Process query
+LC --> VS : Retrieve documents (RAG)
+LC --> LLM : Send enriched prompt
+LLM --> LC : Response
+LC --> SERPER : Fallback retrieval (if needed)
+SERPER --> LC : Web snippets
+LC --> MEM : Save conversation context
+FASTAPI --> NGROK : Return response
+NGROK --> MOBILE : JSON reply → Chat UI
+
+@enduml

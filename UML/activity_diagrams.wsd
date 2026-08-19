@@ -1,0 +1,375 @@
+@startuml
+title Activity Diagram: User Sign Up and Questionnaire
+start
+:User opens app;
+:Check if first-time login;
+if (First-time login?) then (yes)
+  :User signs up;
+  :Prompt questionnaire;
+  :User enters gender, daily cigarettes, cost/day, duration;
+  :Validate form;
+  if (Data valid?) then (yes)
+    :Store in user profile;
+    :Calculate saved money, avoided cigarettes;
+    :Initialize progress and tips based on profile;
+    :Redirect to Home Screen;
+  else (no)
+    :Show error message;
+  endif
+else (no)
+  :Redirect to Login screen;
+endif
+stop
+@enduml
+
+@startuml
+title Activity Diagram: App Home Screen
+start
+:User logs in;
+:Authenticate with backend;
+:Fetch user profile and progress data;
+:Calculate smoke-free days;
+:Retrieve active goal;
+:Retrieve today's tip;
+:Fetch current health progress metrics;
+:Display days smoke-free, tip, progress bars, and current goal;
+stop
+@enduml
+
+@startuml
+title Activity Diagram: Achievements Unlocking
+start
+:User interacts with app (login, progress);
+:Update last quit date and progress metrics;
+:Check progress milestones;
+if (Milestone achieved?) then (yes)
+  :Unlock achievement;
+  :Store in database;
+  :Send motivational notification;
+  :Recalculate leaderboard rank;
+  :Update user's leaderboard score;
+else (no)
+  :Do nothing;
+endif
+stop
+@enduml
+
+@startuml
+title Activity Diagram: Viewing Achievements
+start
+:User opens Achievements tab;
+:Fetch unlocked and locked achievements from database;
+:Sort by completion status;
+:Render achievements list;
+:Highlight unlocked achievements with animation or badge;
+stop
+@enduml
+
+@startuml
+title Activity Diagram: Leaderboard Activity
+start
+:User taps Leaderboard tab;
+:Request user scores from server;
+:Check if
+:Sort based on Rank;
+:Display user rank, friends’ ranks;
+:Highlight user's own ranking;
+stop
+@enduml
+
+@startuml
+title Activity Diagram: Leaderboard Activity
+start
+
+:User opens Leaderboard Screen;
+
+:Request leaderboard data from Backend;
+
+:Backend retrieves all users with their quitDate, XP, and rank;
+
+if (User quitDate < 40 days?) then (yes)
+  :Classify user in "New Quitters" leaderboard;
+else (no)
+  :Classify user in "Experienced Quitters" leaderboard;
+endif
+
+:Sort leaderboard by rank (top 10);
+
+if (Current user in top 10?) then (yes)
+  :Display full top 10 list;
+  :Highlight current user;
+else (no)
+  :Display top 10 list;
+  :Append current user separately (with position info);
+endif
+
+:Send final leaderboard data to App;
+
+:Render Leaderboard Screen with UI components (rank, XP, quit days, avatar);
+
+stop
+@enduml
+
+
+@startuml
+title Activity Diagram: Group Chat
+start
+:User opens Chat tab;
+:Initialize WebSocket connection;
+if (Connection successful?) then (yes)
+  :Fetch recent chat history;
+  :Display chat;
+  :User sends/receives messages;
+  :Update UI in real time;
+else (no)
+  :Show connection error message;
+endif
+stop
+@enduml
+
+@startuml
+title Activity Diagram: Motivational Notifications
+start
+:Daily scheduler triggers OR milestone reached;
+:Query user profile;
+:Select message;
+:Use Firebase to send notification;
+:Display push notification to user;
+:User taps to open relevant section;
+stop
+@enduml
+
+@startuml
+title Activity Diagram: Breathing Techniques
+start
+:User opens Craving Aid section;
+:Select Breathing Technique;
+:Load animation and instructions;
+:Display breathing UI (inhale/exhale timer);
+:Track session duration;
+:End session and optionally give tip or feedback prompt;
+stop
+@enduml
+
+@startuml
+title Activity Diagram: Mini-Games Access
+start
+:User taps Game icon;
+:List all games (Snake, Pac-Man, Tic Tac Toe, etc.);
+:User selects a game;
+:Load selected game engine;
+:Start game session;
+:Track time played;
+:Exit game or auto-exit after timeout;
+stop
+@enduml
+
+@startuml
+title Activity Diagram: Chatbot Interaction
+start
+:User opens Chatbot screen;
+:Display chat interface;
+:User types question or support request;
+:Send message to LLM API (e.g., GroqAI, local model);
+:Wait for response;
+:Receive response;
+:Display response in chat UI;
+:Offer suggested follow-up prompts;
+stop
+@enduml
+
+@startuml
+title Activity Diagram: Add Friend and View Their Progress
+start
+:User navigates to Leaderboard;
+:Tap on "Add Friend";
+:Enter friend's unique ID or username;
+:Send request to server;
+:Check if friend exists;
+if (Exists?) then (yes)
+  :Add to friend list;
+  :Retrieve friend's rank, progress, achievements;
+  :Display in Leaderboard tab;
+else (no)
+  :Show error message;
+endif
+stop
+@enduml
+
+
+@startuml
+title Activity Diagram - Community Chat
+
+start
+:User opens Community Chat feature;
+:App sends request to Backend for room assignment;
+:Backend checks available chat rooms;
+
+if (Is there a room with free capacity?) then (yes)
+  :Assign user to existing room;
+else (no)
+  :Create new chat room;
+  :Assign user to the new room;
+endif
+
+:Load chat history of assigned room;
+:Display messages in chat UI;
+
+if (User sends a message?) then (yes)
+  :Send message to Backend;
+  :Backend stores message in DB;
+  :Broadcast message to all users in same room;
+  :Update chat UI with new message;
+else (no)
+  :User only reads existing messages;
+endif
+
+stop
+@enduml
+
+
+@startuml
+'---------------- NOTIFICATIONS ----------------
+title Activity Diagram - Notifications
+start
+:Trigger event (daily tip, achievement, craving log reminder);
+:Check notification schedule;
+if (App in foreground?) then (yes)
+  :Display in-app notification banner;
+else (no)
+  :Send push notification via Firebase;
+endif
+:User clicks notification;
+:Redirect user to relevant screen (daily tip, goal, chat etc.);
+stop
+@enduml
+
+
+@startuml
+'---------------- ADD FRIEND ----------------
+title Activity Diagram - Add Friend
+start
+:User opens Friends screen;
+:Fetch all existing friends and display them with their stats;
+:Tap on Add Friend;
+:User enters friend's username and social tag;
+if (Target user exist?) then (yes)
+  :Backend updates both friend lists;
+  :Display new friend in UI;
+else (no)
+  :Show error message;
+endif
+stop
+@enduml
+
+
+@startuml
+'---------------- ADD CRAVING LOG ----------------
+title Activity Diagram - Add Craving Log
+start
+:User opens Craving Log screen;
+:User enters craving details (time, intensity, coping method);
+:Save log entry to Backend;
+:Backend stores craving entry in DB;
+:Award user with XP;
+:Update user's statistics (XP, logs history);
+:Display confirmation to user;
+:Display the documentation to the screen;
+stop
+@enduml
+
+
+@startuml
+'---------------- DAILY TIPS ----------------
+title Activity Diagram - Daily Tips
+start
+:User opens Daily Tips screen;
+:Request unlocked tips from Backend;
+:Backend returns tips based on quit date;
+:Display list of available tips in UI;
+if (New day unlocked?) then (yes)
+  :Show new tip as unlocked;
+else (no)
+  :Only display past unlocked tips;
+endif
+:User taps a tip;
+:Opens pop up message with details;
+If (User clicks "Learn More") then (yes)
+  :Redirect user to Chatbot;
+  :Chatbot provides medical/health explanation (via RAG + LangChain);
+  endif
+  :User rates a tip;
+  :Requests tips ratings from backend;
+  :Sort tips by rating;
+stop
+@enduml
+
+
+@startuml
+'---------------- DAILY GOALS ----------------
+title Activity Diagram - Daily Goals
+start
+:User opens Home screen;
+:App requests daily goals progress from Backend;
+:Backend calculates progress based on quit date;
+:Display goals in UI;
+:User taps a goal;
+:Opens pop up message with details;
+If (User clicks "Learn More") then (yes)
+  :Redirect user to Chatbot;
+  :Chatbot provides medical/health explanation (via RAG + LangChain);
+  endif
+stop
+@enduml
+
+
+@startuml
+'---------------- HEALTH PROGRESS GOALS ----------------
+title Activity Diagram - Health Progress Goals with Learn More
+start
+:User opens Health Progress screen;
+:Request progress data from Backend;
+:Backend returns current and future milestones;
+:Display progress bars with completion percentage;
+if (User clicks "Learn More") then (yes)
+  :Redirect user to Chatbot;
+  :Chatbot provides medical/health explanation (via RAG + LangChain);
+else (no)
+  :User only views progress;
+endif
+stop
+@enduml
+
+
+@startuml
+title Activity Diagram - Smoking Cessation Chatbot (LangChain + RAG + Memory + Semantic Filter)
+
+start
+:User types message in Flutter app;
+:App POST /chat via ngrok -> FastAPI;
+
+:FastAPI validates payload (userId, message);
+:Load user profile (Firebase) and user memory;
+:Run Semantic Classifier (smoking-related?);
+
+if (Relevant to smoking?) then (yes)
+  :Construct personalized prompt\n(Profile + cost/day + smoke-free time + memory snippets);
+  :Retrieve top-k docs from Chroma (RAG);
+  :Build final prompt (system + context + user msg + retrieved passages);
+  :Call LLM via OpenRouter (LangChain chain);
+  if (Answer too short/low-confidence?) then (yes)
+    :Call web search (Serper) for snippets;
+    :Re-ask LLM with enriched context;
+  else (no)
+  endif
+  :Append exchange to Conversation Memory;
+  :Persist memory (pickle/Chroma/…);
+  :Return answer JSON to client;
+  :Flutter renders assistant reply;
+else (no)
+  :Return guardrail reply\n("I help with smoking cessation..." );
+  :Optionally log off-topic intent;
+endif
+
+stop
+@enduml

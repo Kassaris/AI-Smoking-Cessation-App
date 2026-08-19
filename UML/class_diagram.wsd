@@ -1,0 +1,111 @@
+' ==========================
+' CLASS DIAGRAM
+' ==========================
+@startuml
+top to bottom direction
+class MockDataService {
+  - {static} List<Tip> cravingsTips
+  - {static} DateTime quitDate
+  - {static} List<HealthGoal> healthGoals
+}
+
+class HealthGoal {
+  - String description
+  - Duration targetDuration
+  + {constructor} HealthGoal({required String description, required Duration targetDuration})
+}
+
+class Tip {
+  - String title
+  - String description
+  - int rating
+  + {constructor} Tip({required String title, required String description, int rating = 0})
+}
+
+class UserModel {
+  - String id
+  - String username
+  - String email
+  - String password
+  - String gender
+  - int cigarettesPerDay
+  - int cigarettesPerPack
+  - double costPerPack
+  - int smokingYears
+  - int userRank
+  - int userXP
+  - Timestamp quitDate
+  - bool questionnaireCompleted
+  - bool hasRated
+  - List<String> completedAchievements
+  - List<String> friendsList
+  - String socialTag
+  - String whySmoke
+  - String feelWhenSmoking
+  - String typeOfSmoker
+  - String whyQuit
+  - String triedQuitMethods
+  - String emotionalMeaning
+  - String cravingSituations
+  - String confidenceLevel
+  - String smokingEnvironment
+  - String biggestFear
+  - String biggestMotivation
+  + {constructor} UserModel({...})
+  + {factory} fromMap(Map<String, dynamic> map, String id)
+  + toMap(): Map<String, dynamic>
+  + copyWith({...}): UserModel
+  + get smokeFreeDays: int
+  + calculateFullTimeDifference(DateTime from, DateTime to): Map<String, int>
+}
+
+class Achievement {
+  - String title
+  - String description
+  - String iconPath
+  - double progress
+  - int xp
+  + {constructor} Achievement({required String title, required String description, required String iconPath, required double progress, required int xp})
+}
+
+class _NotificationMilestone {
+  - Duration delay
+  - String title
+  - String body
+  + {constructor} _NotificationMilestone({required Duration delay, required String title, required String body})
+}
+
+class DailyGoalsManager {
+  - List<int> criticalDays
+  - Map<int, Map<String, String>> messages
+  + {constructor} DailyGoalsManager()
+}
+
+class Timestamp {
+  // External class from cloud_firestore
+}
+
+MockDataService --> Tip : contains
+MockDataService --> HealthGoal : contains
+UserModel --> Timestamp : uses
+UserModel --> AchievementList : has
+AchievementList --> Achievement : contains
+
+DailyGoalsManager --> "1" criticalDays
+DailyGoalsManager --> "many" messages
+
+note right of DailyGoalsManager
+  criticalDays: [1, 3, 7, 10, 14, 20, 21, 28, 30]
+  messages: Map with daily motivational
+  messages for quit journey
+end note
+
+note right of Achievement
+  Types include:
+  - Time-based (days smoke-free)
+  - Money saved (€50, €100, etc.)
+  - Health milestones
+  - Cigarettes avoided
+end note
+
+@enduml

@@ -1,0 +1,442 @@
+@startuml
+title Sequence Diagram: User Sign Up and Questionnaire
+actor User
+participant App
+participant AuthService
+participant QuestionnaireService
+participant Database
+
+User -> App: Launch app
+App -> App: Check login state
+User -> App: Select "Sign Up"
+App -> AuthService: Register credentials
+AuthService --> App: Success/failure
+alt Success
+  App -> User: Show onboarding questionnaire
+  User -> App: Submit gender, smoking habits, cost, etc.
+  App -> QuestionnaireService: Validate and analyze responses
+  QuestionnaireService -> Database: Store profile data
+  QuestionnaireService -> App: Return metrics (money saved, avoided cigs)
+  App -> Database: Save calculated metrics
+  App -> User: Redirect to Home Screen
+else Failure
+  App -> User: Display error message
+end
+@enduml
+
+@startuml
+title Sequence Diagram: Load Home Screen
+actor User
+participant App
+participant AuthService
+participant Database
+participant TipService
+
+User -> App: Open app
+App -> AuthService: Verify credentials
+AuthService --> App: Authenticated
+App -> Database: Fetch user data and health progress
+App -> TipService: Get today’s personalized tip
+TipService -> Database: Query tip set by gender/duration
+TipService --> App: Return tip
+App -> User: Show home screen UI with smoke-free days, goal, tips, health bars
+@enduml
+
+@startuml
+title Sequence Diagram: Unlock Achievement
+participant App
+participant Database
+participant NotificationService
+participant LeaderboardService
+
+App -> App: Track user progress in background
+App -> Database: Fetch achievement milestones
+App -> App: Compare progress with milestones
+alt New Achievement Reached
+  App -> Database: Save unlocked achievement
+  App -> NotificationService: Send motivational message
+  App -> LeaderboardService: Recalculate user rank
+  LeaderboardService -> Database: Update rank value
+else No achievement unlocked
+  App -> App: Continue tracking
+end
+@enduml
+
+@startuml
+title Sequence Diagram: View Achievements
+actor User
+participant App
+participant Database
+
+User -> App: Open Achievements screen
+App -> Database: Fetch user achievements
+App -> App: Separate unlocked/locked
+App -> User: Display badge grid with progress status
+@enduml
+
+@startuml
+title Sequence Diagram: View Leaderboard
+actor User
+participant App
+participant LeaderboardService
+participant Database
+
+User -> App: Tap Leaderboard
+App -> User: Select Global / Friends toggle
+App -> LeaderboardService: Request leaderboard data
+LeaderboardService -> Database: Get achievement scores and user ranks
+App -> User: Show leaderboard with friends & global positions
+@enduml
+
+@startuml
+title Sequence Diagram: Group Chat
+actor User
+participant App
+participant WebSocketService
+participant ChatDatabase
+
+User -> App: Open Chat
+App -> WebSocketService: Establish connection
+WebSocketService --> App: Connection OK
+App -> ChatDatabase: Load recent chat history
+App -> User: Display chat messages
+User -> App: Type and send message
+App -> WebSocketService: Broadcast message
+WebSocketService -> All: Deliver new message
+All -> App: Receive real-time update
+App -> User: Render new messages in chat
+@enduml
+
+@startuml
+title Sequence Diagram: Receive Motivational Notification
+participant Scheduler
+participant App
+participant NotificationService
+participant Database
+
+Scheduler -> App: Trigger (time-based or achievement event)
+App -> NotificationService: Request new message
+NotificationService -> Database: Check user history & preferences
+NotificationService --> App: Return personalized notification
+App -> User: Show push notification (Firebase/local)
+@enduml
+
+@startuml
+title Sequence Diagram: Breathing Technique
+actor User
+participant App
+participant AnimationEngine
+
+User -> App: Navigate to Craving Aid
+User -> App: Tap "Breathing Technique"
+App -> AnimationEngine: Load animation/timing pattern
+App -> User: Guide breathing steps (inhale, hold, exhale)
+loop Each cycle
+  App -> User: Animate and instruct
+end
+App -> User: Session complete feedback
+@enduml
+
+@startuml
+title Sequence Diagram: Play Mini-Game
+actor User
+participant App
+participant GameLoader
+participant GameInstance
+
+User -> App: Open Games section
+App -> GameLoader: Fetch available mini-games
+User -> App: Select a game (e.g., Snake)
+App -> GameLoader: Load game engine
+GameLoader -> GameInstance: Initialize game session
+User -> GameInstance: Interact (play)
+GameInstance -> App: Track duration (optional)
+App -> User: Allow exit or retry
+@enduml
+
+@startuml
+title Sequence Diagram: Chatbot Interaction
+
+actor User
+participant App
+participant ChatInterface
+participant "LLM API\n(GroqAI)" as LLM_API
+
+User -> App: Open Chatbot screen
+App -> ChatInterface: Initialize session
+User -> ChatInterface: Type question
+ChatInterface -> LLM_API: Send query (with context)
+LLM_API --> ChatInterface: Return response
+ChatInterface -> App: Format and render response
+App -> User: Display chatbot message
+User -> App: Optionally ask follow-up
+
+@enduml
+
+
+@startuml
+title Sequence Diagram: Add Friend and View Progress
+actor User
+participant App
+participant FriendService
+participant Database
+
+User -> App: Tap "Add Friend"
+App -> FriendService: Validate friend Username and Social Tag
+FriendService -> Database: Lookup friend by Username and Social Tag
+alt Friend exists
+  Database --> FriendService: Friend found
+  FriendService -> App: Add to friend list
+  App -> Database: Fetch friend's progress and rank
+  App -> User: Show friend in screen
+else Friend not found
+  FriendService --> App: Return error
+  App -> User: Show error message
+end
+@enduml
+
+
+
+@startuml
+title Leaderboard Sequence Diagram
+
+actor User
+participant "Flutter App" as APP
+participant "LeaderboardProvider" as LP
+participant "Firestore" as DB
+
+User -> APP : Open Leaderboard Screen
+APP -> LP : Request leaderboard data
+LP -> DB : Query top users by quitDate & rank
+DB --> LP : Return leaderboard data
+LP --> APP : Provide leaderboard list
+APP --> User : Display leaderboard UI
+@enduml
+
+
+@startuml
+title Community Chat Sequence Diagram
+
+actor User
+participant "Flutter App" as APP
+participant "Chat Service" as CHAT
+participant "Room Manager" as RM
+participant "Firestore" as DB
+
+User -> APP : Open Community Chat
+APP -> CHAT : Request room join
+CHAT -> RM : Check room capacity
+alt Room Full
+  RM -> CHAT : Create new room
+end
+CHAT -> DB : Fetch room messages
+DB --> CHAT : Messages
+CHAT --> APP : Room + messages
+APP --> User : Display chat UI
+@enduml
+
+@startuml
+title Notifications Sequence Diagram
+
+actor User
+participant "Flutter App" as APP
+participant "Notification Scheduler" as NS
+participant "Device OS" as OS
+
+NS -> OS : Schedule notification
+OS -> User : Push notification (motivation/tip)
+User -> APP : Open app from notification
+@enduml
+
+@startuml
+title Add Friend Sequence Diagram
+
+actor User
+participant "Flutter App" as APP
+participant "FriendService" as FS
+participant "Firestore" as DB
+
+User -> APP : Add friend request
+APP -> FS : Send friend request
+FS -> DB : Store friend relation
+DB --> FS : Confirmation
+APP --> User : Show friend added
+@enduml
+
+
+@startuml
+title Sequence Diagram - Add Craving Log
+
+actor User
+participant "Flutter App" as App
+participant "CravingService" as CS
+participant "UserService" as US
+participant "Firestore" as DB
+
+User -> App : Open Craving Log screen
+App -> User : Display craving form
+
+User -> App : Enter craving details\n(time, intensity, coping method)
+App -> CS : Submit craving data
+CS -> DB : Save log entry
+DB --> CS : Entry stored
+CS -> US : Award XP for logging
+US -> DB : Update user XP and statistics
+DB --> US : Update confirmed
+US --> CS : XP awarded
+CS --> App : Success response
+App -> User : Display confirmation
+App -> App : Refresh documentation screen
+App --> User : Display updated logs
+@enduml
+
+
+@startuml
+title Sequence Diagram - Daily Tips
+
+actor User
+participant "Flutter App" as App
+participant "TipsService" as TS
+participant "Firestore" as DB
+participant "Chatbot API" as Chatbot
+
+User -> App : Open Daily Tips screen
+App -> TS : Request unlocked tips
+TS -> DB : Fetch user's quit date
+DB --> TS : Quit date
+TS -> TS : Calculate unlocked tips based on quit date
+TS --> App : Return tips list
+App -> User : Display available tips
+
+alt New day unlocked
+  App -> User : Show new tip as unlocked
+else No new day
+  App -> User : Display past unlocked tips
+end
+
+User -> App : Tap a tip
+App -> User : Open popup with details
+
+alt User clicks "Learn More"
+  User -> App : Click "Learn More"
+  App -> Chatbot : Request medical explanation
+  Chatbot --> App : Return health explanation
+  App -> User : Show chatbot response
+end
+
+User -> App : Rate a tip
+App -> TS : Submit rating
+TS -> DB : Update tip ratings
+DB --> TS : Rating saved
+TS -> TS : Sort tips by rating
+TS --> App : Updated sorted tips
+App -> User : Refresh tips list
+@enduml
+
+
+@startuml
+title Sequence Diagram - Daily Goals
+
+actor User
+participant "Flutter App" as App
+participant "GoalsService" as GS
+participant "Firestore" as DB
+participant "Chatbot API" as Chatbot
+
+User -> App : Open Home screen
+App -> GS : Request daily goals progress
+GS -> DB : Fetch user's quit date
+DB --> GS : Quit date
+GS -> GS : Calculate progress based on quit date
+GS --> App : Return goals with progress
+App -> User : Display goals in UI
+
+User -> App : Tap a goal
+App -> User : Open popup with details
+
+alt User clicks "Learn More"
+  User -> App : Click "Learn More"
+  App -> Chatbot : Request medical explanation
+  Chatbot --> App : Return health explanation
+  App -> User : Show chatbot response
+end
+@enduml
+
+@startuml
+title Sequence Diagram - Health Progress Goals
+
+actor User
+participant "Flutter App" as App
+participant "HealthService" as HS
+participant "Firestore" as DB
+participant "Chatbot API" as Chatbot
+
+User -> App : Open Health Progress screen
+App -> HS : Request progress data
+HS -> DB : Fetch user's quit date
+DB --> HS : Quit date
+HS -> HS : Calculate current/future milestones
+HS --> App : Return progress data
+App -> User : Display progress bars with completion percentage
+
+alt User clicks "Learn More"
+  User -> App : Click "Learn More" button
+  App -> Chatbot : Request medical explanation
+  Chatbot --> App : Return health explanation\n(via RAG + LangChain)
+  App -> User : Show detailed health information
+else User doesn't click
+  App -> User : Maintain progress view
+end
+@enduml
+
+
+
+@startuml
+title Sequence Diagram - Chatbot with LangChain, RAG, Memory, Semantic Filter
+
+actor User
+participant "Flutter App" as APP
+participant "ngrok Tunnel" as NG
+participant "FastAPI\n(/chat)" as API
+participant "LangChain Orchestrator" as LC
+participant "Semantic Classifier\n(SBERT)" as SEM
+database "Firebase\n(User Profile)" as FB
+database "Chroma DB\n(Vector Store)" as VS
+database "User Memory\n(pickle/Buffer)" as MEM
+participant "LLM API\n(OpenRouter)" as LLM
+participant "Web Search\n(Serper)" as WS
+
+User -> APP: Type message
+APP -> NG: HTTPS POST /chat {userId, message}
+NG -> API: Forwarded request
+API -> FB: get_user_profile(userId)
+FB --> API: profile JSON
+API -> MEM: load(userId)
+MEM --> API: memory buffer (if exists)
+
+API -> SEM: is_smoking_related(message)
+SEM --> API: {relevant: true/false, score}
+
+alt Not smoking-related
+  API -> APP: JSON {"reply": guardrail_msg}
+  APP -> User: Show guardrail
+else Smoking-related
+  API -> LC: build personalized prompt\n(profile + computed metrics)
+  API -> VS: retriever.get_relevant_docs(message)
+  VS --> API: top-k chunks
+  API -> LC: assemble final prompt (system+context+chunks+history)
+  API -> LLM: chat.completions
+  LLM --> API: draft answer
+
+  alt Low length/contains "sorry"/"don't know"
+    API -> WS: search(message)
+    WS --> API: snippets
+    API -> LLM: re-ask with snippets
+    LLM --> API: improved answer
+  end
+
+  API -> MEM: append(user msg, assistant reply); persist(userId)
+  API -> APP: JSON {"reply": answer}
+  APP -> User: Render reply
+end
+@enduml

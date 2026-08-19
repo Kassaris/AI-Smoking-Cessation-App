@@ -1,0 +1,47 @@
+@startuml UseCase
+' ==========================
+' USE CASE DIAGRAM
+' ==========================
+actor "General User" as General
+actor "Unsinged User" as Unsigned
+actor "Signed User" as Signed
+actor User
+actor "AI Chatbot" as Chatbot
+actor "System Scheduler" as Scheduler
+
+rectangle SmokingCessationApp {
+  Unsigned ->General 
+  General <- Signed
+  Signed <- User
+    User -- (User Identification Login/Sign Up)
+    User -- (Complete First Time Login Questionnaire)
+    User -- (View Progress)
+    User -- (Health Goals)
+    User -- (Daily Goals)
+    User -- (Earn Achievements)
+    User -- (Check Achievements)
+    User -- (Daily Tips)
+    User -- (Breathing Exercises)
+    User -- (Document Cravings)
+    User -- (Delete Account)
+    User -- (Community Chat)
+    User -- (Play Mini-Games)
+    User -- (Chat with AI)
+    User -- (Add Friend)
+    User -- (View Friends and Their Progress)
+    User -- (View Leaderboard)
+    User -- (Receive Notifications)
+
+    Chatbot -- (Chat with AI)
+    Scheduler -- (Send  Notification)
+}
+@enduml
+
+
+
+
+
+
+
+
+
