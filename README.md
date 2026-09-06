@@ -63,10 +63,6 @@ The application follows a modular architecture separating the **presentation lay
 
 The Flutter client uses a Provider-based architecture in which UI screens communicate with dedicated state-management providers and service classes. Firebase handles persistent cloud functionality, while conversational requests are forwarded to a separate FastAPI/LangChain backend.
 
-<p align="center">
-  <img src="UML/rendered/system_component_diagram.png" width="900"/>
-</p>
-
 > **UML source:** [`UML/component_diagrams.wsd`](UML/component_diagrams.wsd)
 
 ### Main Architectural Layers
@@ -232,10 +228,6 @@ Instead, the backend combines:
 
 to construct a context-enriched request for the language model.
 
-<p align="center">
-  <img src="UML/rendered/chatbot_component_diagram.png" width="900"/>
-</p>
-
 > **UML source:** [`UML/component_diagrams.wsd`](UML/component_diagrams.wsd)
 
 ---
@@ -380,10 +372,6 @@ The fallback is therefore used as a secondary retrieval mechanism rather than re
 # Chatbot Deployment
 
 The thesis additionally models the deployment of the AI subsystem separately from the application-level component architecture.
-
-<p align="center">
-  <img src="UML/rendered/chatbot_deployment_diagram.png" width="900"/>
-</p>
 
 > **UML source:** [`UML/deployment_diagrams.wsd`](UML/deployment_diagrams.wsd)
 
