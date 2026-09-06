@@ -14,7 +14,7 @@ The project explores how mobile health technologies and Large Language Models ca
 
 ---
 
-## 📄 Diploma Thesis
+##  Diploma Thesis
 
 The complete research background, requirements analysis, system design, implementation methodology and evaluation are documented in the accompanying Diploma Thesis.
 
@@ -188,7 +188,6 @@ The platform provides multiple tools intended for moments of increased craving:
 
 <p align="center">
   <img src="screenshots/beat_cravings.PNG" width="260"/>
-  <img src="screenshots/mini-games.PNG" width="520"/>
 </p>
 
 Implemented mini-games include:
@@ -264,7 +263,7 @@ This provides:
 * predictable handling of unrelated questions
 
 <p align="center">
-  <img src="screenshots/wrong_questions.PNG" width="650"/>
+  <img src="screenshots/wrong_questions.PNG" width="250"/>
 </p>
 
 ---
@@ -868,8 +867,9 @@ Unlike a standalone chatbot integration, the AI subsystem operates as part of a 
 
 ## Research Material
 
-📄 **[Full Diploma Thesis](documents/thesis.pdf)**
-📐 **[UML Design Files](UML/)**
+**[Full Diploma Thesis](documents/thesis.pdf)**
+
+**[UML Design Files](UML/)**
 
 The repository contains the implementation, thesis, application screenshots, UML models and AI evaluation tooling developed as part of the project.
 
