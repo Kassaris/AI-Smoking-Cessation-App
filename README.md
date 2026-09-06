@@ -1,150 +1,195 @@
 # AI-Assisted Smoking Cessation Platform
 
-A full-stack **mobile health application for smoking cessation**, combining a cross-platform Flutter client, Firebase cloud services, behavioral-support tools, and a **personalized Retrieval-Augmented Generation (RAG) assistant**.
+> **Diploma Thesis — National Technical University of Athens (NTUA), School of Electrical and Computer Engineering**
 
-Developed as a **Diploma Thesis at the National Technical University of Athens (NTUA), School of Electrical and Computer Engineering**.
+A full-stack **mobile health platform for smoking cessation**, combining a cross-platform Flutter application, Firebase cloud infrastructure, behavioral-support and gamification mechanisms, and a personalized **Retrieval-Augmented Generation (RAG) conversational assistant**.
 
-## Overview
+The project explores how mobile health technologies and Large Language Models can be combined to provide **personalized, context-aware and evidence-grounded support** throughout the smoking-cessation journey.
 
-This thesis explores the design and implementation of an intelligent digital platform for supporting users throughout the smoking-cessation process.
-
-The system combines conventional mobile-health functionality with a context-aware conversational assistant capable of incorporating:
-
-* curated smoking-cessation knowledge,
-* semantic document retrieval,
-* user-specific cessation data,
-* conversation history,
-* and large language model generation.
-
-The resulting platform integrates **mobile development, cloud infrastructure, backend engineering and applied generative AI** into a single end-to-end system.
-
-### Key Capabilities
-
-* Personalized smoking-cessation tracking
-* Health and financial progress monitoring
-* AI-powered conversational support
-* Retrieval-Augmented Generation (RAG)
-* User-profile-aware response generation
-* Persistent conversational context
-* Craving-management interventions
-* Goals and achievement tracking
-* Social and community features
-* Push and local notifications
-* AI response logging and evaluation
-
-## Thesis
-
-The accompanying Diploma Thesis documents the **system design, implementation, AI architecture, methodology and evaluation** in detail.
-
-> 📄 **[Read the full Diploma Thesis (PDF)](PATH_TO_THESIS.pdf)**
-
-The thesis provides the research and engineering context behind the implementation, including the motivation for the system, architectural decisions, smoking-cessation support methodology, RAG pipeline and evaluation process.
-
-> **Project scope:** This repository contains the implementation of the system developed as part of the Diploma Thesis, including the Flutter mobile application, Firebase infrastructure, AI backend, retrieval pipeline and evaluation tooling.
+<p align="center">
+  <img src="screenshots/home_screen.PNG" width="250"/>
+  <img src="screenshots/questionnaire.PNG" width="375"/>
+  <img src="screenshots/personalized_answers.PNG" width="500"/>
+</p>
 
 ---
 
-## System Architecture
+## 📄 Diploma Thesis
 
-The platform follows a multi-component architecture separating the mobile client, cloud services and AI inference pipeline.
+The complete research background, requirements analysis, system design, implementation methodology and evaluation are documented in the accompanying Diploma Thesis.
 
-```text
-┌───────────────────────────────────────────────┐
-│              Flutter Mobile App               │
-│                                               │
-│  Progress · Goals · Cravings · Social · Chat  │
-└───────────────┬───────────────────────────────┘
-                │
-        ┌───────┴───────────┐
-        │                   │
-        ▼                   ▼
-┌───────────────┐    ┌──────────────────┐
-│   Firebase    │    │  FastAPI Backend │
-│               │    │                  │
-│ Auth          │    │   /chat API      │
-│ Firestore     │    └────────┬─────────┘
-│ Storage       │             │
-│ Messaging     │             ▼
-└───────────────┘    ┌──────────────────┐
-                     │ LangChain / RAG  │
-                     └────────┬─────────┘
-                              │
-                ┌─────────────┼─────────────┐
-                │             │             │
-                ▼             ▼             ▼
-          User Profile     Chroma       Conversation
-            Context       Retrieval       Memory
-                │             │             │
-                └─────────────┼─────────────┘
-                              ▼
-                      Context Assembly
-                              │
-                              ▼
-                     OpenRouter / LLM
-                              │
-                              ▼
-                    Personalized Response
-```
+> **[Read the full Diploma Thesis (PDF)](documents/thesis.pdf)**
 
-This separation allows the mobile application, persistent user data and AI subsystem to evolve independently while communicating through clearly defined interfaces.
+The thesis covers the complete development lifecycle, including smoking-cessation research, requirements engineering, UML system modeling, Flutter/Firebase implementation, chatbot architecture, RAG, personalization, LLM evaluation, limitations and future work.
 
 ---
 
-## Technology Stack
+## Project Overview
 
-| Layer                  | Technologies                                  |
-| ---------------------- | --------------------------------------------- |
-| **Mobile Client**      | Flutter, Dart                                 |
-| **State Management**   | Provider                                      |
-| **Local Storage**      | Hive, SharedPreferences                       |
-| **Authentication**     | Firebase Authentication, Google Sign-In       |
-| **Cloud Database**     | Cloud Firestore                               |
-| **Cloud Storage**      | Firebase Storage                              |
-| **Notifications**      | Firebase Cloud Messaging, Local Notifications |
-| **Backend API**        | Python, FastAPI                               |
-| **AI Orchestration**   | LangChain                                     |
-| **Vector Database**    | Chroma                                        |
-| **Embeddings**         | HuggingFace Sentence Transformers             |
-| **LLM Access**         | OpenRouter / DeepSeek                         |
-| **External Retrieval** | Serper API                                    |
-| **AI Evaluation**      | DeepEval                                      |
+The system was designed as an **end-to-end digital smoking-cessation platform**, rather than as a standalone tracking application or generic AI chatbot.
+
+It integrates four major subsystems:
+
+* **Flutter mobile client** for user interaction and behavioral-support functionality
+* **Firebase cloud infrastructure** for authentication, persistence, synchronization and messaging
+* **FastAPI backend** for AI orchestration and user-aware conversational processing
+* **RAG-based LLM subsystem** for domain-grounded and personalized conversational support
+
+The application combines self-monitoring, psychological support, social interaction and gamification with generative AI.
+
+### Core Capabilities
+
+* Personalized onboarding questionnaire
+* Smoke-free progress and health tracking
+* Cigarettes avoided and financial savings
+* Daily and health-related goals
+* Achievements, XP and ranking system
+* Craving logging and coping mechanisms
+* Guided breathing exercises
+* Distraction-oriented mini-games
+* Friends, leaderboard and community chat
+* Push and scheduled notifications
+* Personalized RAG-based AI assistant
+* Persistent conversational memory
+* Semantic off-topic filtering
+* External search fallback
+* Automated LLM/RAG evaluation
+
+---
+
+# System Architecture
+
+The application follows a modular architecture separating the **presentation layer, state management, application services, cloud infrastructure and AI subsystem**.
+
+The Flutter client uses a Provider-based architecture in which UI screens communicate with dedicated state-management providers and service classes. Firebase handles persistent cloud functionality, while conversational requests are forwarded to a separate FastAPI/LangChain backend.
+
+<p align="center">
+  <img src="UML/rendered/system_component_diagram.png" width="900"/>
+</p>
+
+> **UML source:** [`UML/component_diagrams.wsd`](UML/component_diagrams.wsd)
+
+### Main Architectural Layers
+
+| Layer            | Responsibility                                                         |
+| ---------------- | ---------------------------------------------------------------------- |
+| **Flutter UI**   | Screens and user interaction                                           |
+| **Providers**    | Application state and business logic                                   |
+| **Services**     | Authentication, Firestore, notifications and chatbot API communication |
+| **Firebase**     | Authentication, persistent data and messaging                          |
+| **FastAPI**      | AI API and request orchestration                                       |
+| **LangChain**    | Retrieval, prompting and conversation management                       |
+| **ChromaDB**     | Local vector knowledge base                                            |
+| **LLM Provider** | Response generation                                                    |
+| **Serper**       | External retrieval fallback                                            |
+
+---
+
+# Technology Stack
+
+| Layer                    | Technologies                                  |
+| ------------------------ | --------------------------------------------- |
+| **Mobile Application**   | Flutter, Dart                                 |
+| **Architecture / State** | Provider                                      |
+| **Local Persistence**    | Hive, SharedPreferences                       |
+| **Authentication**       | Firebase Authentication, Google Sign-In       |
+| **Cloud Database**       | Cloud Firestore                               |
+| **Cloud Storage**        | Firebase Storage                              |
+| **Notifications**        | Firebase Cloud Messaging, Local Notifications |
+| **Backend API**          | Python, FastAPI                               |
+| **AI Orchestration**     | LangChain                                     |
+| **Vector Store**         | ChromaDB                                      |
+| **Embeddings**           | HuggingFace Sentence Transformers             |
+| **LLM**                  | DeepSeek via OpenRouter                       |
+| **External Retrieval**   | Serper API                                    |
+| **AI Evaluation**        | DeepEval, TruLens                             |
 
 ---
 
 # Mobile Application
 
-The Flutter application serves as the primary user-facing component of the platform.
+## Personalized Onboarding
 
-It integrates cessation tracking, behavioral-support interventions, social functionality and the AI assistant within a unified mobile experience.
+During first-time setup, users complete a questionnaire describing their smoking habits, cessation goals and personal motivations.
 
-## Progress & Motivation
+Collected information can include:
 
-The application tracks the user's cessation journey and transforms progress into measurable feedback.
+* cigarettes smoked per day
+* cigarette pack size and cost
+* smoking history
+* quit date
+* previous quit attempts
+* craving situations
+* smoking environment
+* confidence level
+* emotional relationship with smoking
+* fears related to quitting
+* personal motivation
 
-Functionality includes:
+This profile becomes part of both the application experience and the AI personalization pipeline.
+
+<p align="center">
+  <img src="screenshots/questionnaire.PNG" width="700"/>
+</p>
+
+---
+
+## Progress & Health Tracking
+
+The application continuously transforms the user's cessation journey into measurable feedback.
+
+Users can monitor:
 
 * smoke-free duration
-* health progress
-* financial progress
-* personal goals
+* cigarettes avoided
+* estimated money saved
+* health recovery milestones
+* daily goals
 * achievements
-* statistics
-* motivational content
-* daily cessation tips
+* XP and ranking
+* personal progress statistics
 
-These features provide users with continuous feedback throughout the cessation process.
+<p align="center">
+  <img src="screenshots/home_screen.PNG" width="430"/>
+</p>
+
+---
+
+## Gamification
+
+Gamification is integrated as a motivational mechanism rather than as an isolated UI feature.
+
+Users earn **experience points (XP)** by completing achievements and reaching milestones.
+
+The leaderboard dynamically ranks users according to their accumulated progress, while achievements provide additional positive reinforcement throughout the cessation journey.
+
+The system includes:
+
+* XP-based progression
+* achievements
+* dynamically calculated ranks
+* leaderboard
+* friend progress
+* milestone-based rewards
+
+---
 
 ## Craving Management
 
-The application includes several interventions intended for moments of increased craving.
+The platform provides multiple tools intended for moments of increased craving:
 
-### Guided Breathing
+* guided breathing techniques
+* craving logging
+* daily cessation tips
+* motivational content
+* distraction-oriented mini-games
+* community support
+* AI conversational support
 
-Interactive breathing exercises provide structured techniques that users can access directly from the application.
-
-### Distraction Activities
-
-Short interactive games provide an alternative activity during craving episodes.
+<p align="center">
+  <img src="screenshots/beat_cravings.PNG" width="260"/>
+  <img src="screenshots/mini-games.PNG" width="520"/>
+</p>
 
 Implemented mini-games include:
 
@@ -152,154 +197,218 @@ Implemented mini-games include:
 * Pac-Man
 * Tic-Tac-Toe
 
-### Additional Support
+---
 
-Users can also access motivational content, cessation resources, daily tips and the conversational assistant.
+## Social & Community Support
 
-## Social Layer
+The platform provides a social layer designed to complement individual progress tracking.
 
-Community-oriented functionality includes:
+Features include:
 
-* Friends
-* Global chat
-* Leaderboards
-* Achievements
+* friend connections
+* friend progress
+* community chat
+* craving-related community interaction
+* leaderboard
+* achievements
 
-Firebase provides the cloud infrastructure required for persistent user and social data.
+<p align="center">
+  <img src="screenshots/community_chat.PNG" width="270"/>
+  <img src="screenshots/social.PNG" width="540"/>
+</p>
+
+Firestore real-time synchronization allows changes related to community features, cravings and rankings to propagate across clients.
 
 ---
 
-# AI Conversational Assistant
+# Personalized AI Assistant
 
-A central engineering component of the thesis is the implementation of a **domain-specific, personalized RAG assistant for smoking-cessation support**.
+A central contribution of the thesis is the implementation of a **domain-specific conversational assistant for smoking cessation**.
 
-Rather than forwarding user messages directly to a general-purpose LLM, the backend constructs responses using multiple contextual information sources.
+The chatbot does not simply forward user messages to a general-purpose LLM.
 
-```text
-             User Message
-                   │
-                   ▼
-        Semantic Relevance Check
-                   │
-                   ▼
-        ┌──────────────────────┐
-        │   Context Retrieval  │
-        └──────────┬───────────┘
-                   │
-       ┌───────────┼────────────┐
-       │           │            │
-       ▼           ▼            ▼
- Knowledge      User Profile  Conversation
-   Base           Context       History
-       │           │            │
-       └───────────┼────────────┘
-                   ▼
-             Prompt Context
-                   │
-                   ▼
-                  LLM
-                   │
-                   ▼
-        Personalized Response
-```
+Instead, the backend combines:
 
-## Retrieval-Augmented Generation
+**user profile + conversation history + retrieved smoking-cessation knowledge + current query**
 
-The knowledge retrieval layer is implemented using:
+to construct a context-enriched request for the language model.
 
-* **LangChain**
-* **Chroma**
-* **HuggingFace embeddings**
+<p align="center">
+  <img src="UML/rendered/chatbot_component_diagram.png" width="900"/>
+</p>
 
-Documents are transformed into vector representations and stored in a persistent Chroma vector database.
+> **UML source:** [`UML/component_diagrams.wsd`](UML/component_diagrams.wsd)
 
-For each relevant query, the system performs semantic retrieval to identify information from the knowledge base that can support response generation.
+---
 
-The retrieved context is then supplied to the language model together with the user's query and personalized context.
+## Semantic Domain Filtering
 
-This architecture aims to produce responses that are more **domain-grounded and contextually relevant** than direct LLM generation.
+Before invoking the complete RAG pipeline, the backend performs a **semantic relevance check**.
 
-## Personalization
-
-User-specific information is retrieved from the application's data layer and incorporated into the conversational context.
-
-Depending on available profile data, this may include:
-
-* smoking frequency
-* cigarette consumption
-* smoking duration
-* cigarette cost
-* quit date
-* previous cessation attempts
-* craving situations
-* confidence level
-* environmental factors
-* concerns about quitting
-* personal motivations
-
-Conceptually:
+The classifier uses:
 
 ```text
-Domain Knowledge
-       +
-User Profile
-       +
-Conversation History
-       +
-Current Question
-       │
-       ▼
-Personalized Context
-       │
-       ▼
-LLM Response
+SentenceTransformer: all-MiniLM-L6-v2
+Similarity:          Cosine Similarity
 ```
 
-This enables the assistant to adapt its responses to the user's individual cessation journey instead of operating as a stateless general-purpose chatbot.
+The incoming message is embedded and compared against pre-encoded smoking-related examples.
 
-## Conversational Memory
+Queries below the configured semantic-similarity threshold are classified as off-topic and rejected before expensive retrieval or LLM operations are performed.
 
-The system maintains conversation context so that subsequent interactions can account for previous exchanges.
+This provides:
 
-This allows follow-up questions and responses to remain contextually connected within an ongoing conversation.
+* domain control
+* reduced unnecessary API usage
+* reduced token consumption
+* predictable handling of unrelated questions
 
-## Semantic Relevance Filtering
+<p align="center">
+  <img src="screenshots/wrong_questions.PNG" width="650"/>
+</p>
 
-Before entering the complete retrieval and generation pipeline, messages can be evaluated for semantic relevance to the smoking-cessation domain.
+---
 
-This acts as an additional control layer around the domain-specific assistant.
+# Retrieval-Augmented Generation
 
-## External Search Fallback
+The conversational backend uses **Retrieval-Augmented Generation (RAG)** to ground generated responses in a dedicated smoking-cessation knowledge base.
 
-The architecture also supports an external retrieval fallback through the **Serper API**.
+## Knowledge Ingestion
 
-When the primary knowledge retrieval pipeline cannot provide sufficient information, additional search results can be retrieved and incorporated into the response-generation process.
+Source documents are processed before inference.
+
+The ingestion pipeline performs:
+
+1. document loading
+2. text extraction
+3. text splitting into manageable chunks
+4. semantic embedding
+5. persistent vector storage
+
+Documents are divided into chunks of approximately **500 tokens** before embedding.
+
+The embedding model used for the knowledge base is:
 
 ```text
-Knowledge Base Retrieval
-          │
-          ▼
-    Sufficient Context?
-       /          \
-     Yes           No
-      │             │
-      ▼             ▼
- LLM Response    Web Search
-                    │
-                    ▼
-              Additional Context
-                    │
-                    ▼
-                LLM Response
+paraphrase-MiniLM-L3-v2
 ```
+
+through `HuggingFaceEmbeddings`.
+
+The resulting vectors are persisted locally using **ChromaDB**.
+
+Implementation:
+
+```text
+lib/chatbot_backend/ingest_documents.py
+```
+
+---
+
+## Retrieval Pipeline
+
+At query time, the user's message is transformed into an embedding and compared against the stored vectors.
+
+Relevant document chunks are retrieved and supplied to the LLM together with the personalized user context.
+
+This separates two important responsibilities:
+
+**Retriever**
+
+Identifies relevant information from the domain knowledge base.
+
+**Generator**
+
+Uses the retrieved context to construct the final natural-language response.
+
+The architecture reduces reliance on the model's internal knowledge and provides a mechanism for generating more **grounded, domain-specific responses**.
+
+---
+
+# Contextual Personalization
+
+Before generation, the backend retrieves the authenticated user's profile from **Cloud Firestore**.
+
+A structured contextual prompt is constructed from relevant profile attributes such as:
+
+```text
+cigarettesPerDay
+costPerPack
+quitDate
+smokingYears
+whyQuit
+emotionalMeaning
+biggestFear
+biggestMotivation
+```
+
+This context is combined with the current message before inference.
+
+As a result, users asking similar questions can receive different responses based on their smoking history, motivations and cessation progress.
+
+<p align="center">
+  <img src="screenshots/personalized_answers.PNG" width="850"/>
+</p>
+
+---
+
+# Persistent Conversation Memory
+
+The chatbot maintains conversation history through LangChain's:
+
+```text
+ConversationBufferMemory
+```
+
+Conversation state is maintained independently for each user and persisted between interactions.
+
+User-specific memory can be serialized locally and restored in future sessions, allowing the assistant to maintain continuity across conversations rather than treating every request as stateless.
+
+The QA chain is also initialized once during the backend lifecycle, avoiding repeated loading of the embedding infrastructure and vector database for every request.
+
+---
+
+# External Search Fallback
+
+When the internal retrieval pipeline cannot provide sufficient context, the backend supports an additional retrieval mechanism through the **Serper API**.
+
+This allows the conversational pipeline to retrieve supplementary web information before producing the final response.
+
+The fallback is therefore used as a secondary retrieval mechanism rather than replacing the curated local knowledge base.
+
+---
+
+# Chatbot Deployment
+
+The thesis additionally models the deployment of the AI subsystem separately from the application-level component architecture.
+
+<p align="center">
+  <img src="UML/rendered/chatbot_deployment_diagram.png" width="900"/>
+</p>
+
+> **UML source:** [`UML/deployment_diagrams.wsd`](UML/deployment_diagrams.wsd)
+
+The modeled deployment consists of:
+
+* Flutter mobile client
+* HTTPS/ngrok communication layer
+* FastAPI backend
+* LangChain orchestration engine
+* ChromaDB vector store
+* persistent user/session memory
+* Firebase user profiles
+* external LLM provider
+* Serper search API
+
+This separation keeps AI orchestration, external credentials and retrieval infrastructure outside the mobile client.
 
 ---
 
 # Backend API
 
-The AI subsystem is exposed to the Flutter application through a **FastAPI REST service**.
+The conversational subsystem is exposed through a **FastAPI REST API**.
 
-The primary conversational endpoint is:
+Primary endpoint:
 
 ```http
 POST /chat/
@@ -314,60 +423,182 @@ Example request:
 }
 ```
 
-The backend is responsible for orchestrating:
+The backend coordinates:
 
-1. Request validation
-2. User identification
-3. User-profile retrieval
-4. Semantic relevance analysis
-5. Vector retrieval
-6. Conversation context
-7. Prompt construction
+1. request validation
+2. user identification
+3. semantic domain classification
+4. Firestore profile retrieval
+5. conversation-memory loading
+6. vector retrieval
+7. contextual prompt construction
 8. LLM inference
-9. Fallback retrieval
-10. Response delivery
+9. optional fallback retrieval
+10. memory persistence
+11. response delivery
 
-This keeps AI orchestration separate from the Flutter client and provides a dedicated service boundary for the conversational system.
-
----
-
-# Firebase Infrastructure
-
-Firebase provides the application's cloud data and identity layer.
-
-```text
-Firebase
-│
-├── Authentication
-│   └── User identity / sign-in
-│
-├── Cloud Firestore
-│   └── Application & user data
-│
-├── Cloud Storage
-│   └── File / media storage
-│
-└── Cloud Messaging
-    └── Push notifications
-```
-
-The mobile application additionally supports local persistence for selected application state using **Hive** and **SharedPreferences**.
+Logging is included throughout the pipeline to provide visibility into semantic classification, profile retrieval and AI processing.
 
 ---
 
-# AI Evaluation
+# LLM & RAG Evaluation
 
-The repository includes dedicated tooling for logging and evaluating chatbot responses.
+Because the conversational assistant operates in a health-related domain, evaluation was treated as a dedicated part of the thesis rather than relying exclusively on subjective inspection of generated responses.
+
+Two complementary evaluation frameworks were used:
+
+* **DeepEval**
+* **TruLens**
+
+The objective was to evaluate both the **quality of generated answers** and the behavior of the **retrieval pipeline**.
+
+---
+
+## DeepEval
+
+DeepEval was used to implement reproducible automated tests over recorded chatbot interactions.
+
+The evaluation workflow consists of two stages:
 
 ```text
-lib/chatbot_backend/
-├── create_logs.py
-└── evaluate_with_deepeval.py
+Chatbot Interaction
+        ↓
+Structured Logging
+        ↓
+logs.jsonl
+        ↓
+DeepEval Test Cases
+        ↓
+LLM-as-a-Judge
+        ↓
+Evaluation Metrics
+        ↓
+deepeval_report.csv
 ```
 
-The evaluation pipeline uses **DeepEval** to provide a structured approach to assessing the conversational system.
+The evaluation uses **GPT-4o-mini as the judge model**, independently from the main DeepSeek conversational model.
 
-This is an important part of the overall implementation: the AI component is treated not only as an integration with an LLM API, but as a subsystem whose generated responses can be **recorded, analyzed and evaluated**.
+### Metrics
+
+| Metric                   | Evaluates                                                         |
+| ------------------------ | ----------------------------------------------------------------- |
+| **Answer Relevancy**     | Whether the generated answer addresses the user's question        |
+| **Faithfulness**         | Whether claims in the response are supported by retrieved context |
+| **Contextual Precision** | Whether retrieved context is relevant and appropriately ranked    |
+
+Scores are normalized to the `[0, 1]` range.
+
+The thesis reports consistently high scores across the evaluated interactions, with several representative test cases achieving **1.0 across all three metrics**.
+
+This included both general cessation questions and more context-dependent questions involving previous quit attempts and persistent cravings.
+
+---
+
+## TruLens
+
+**TruLens** was used as a complementary evaluation and observability framework.
+
+While DeepEval focuses on reproducible automated testing, TruLens provides additional visibility into the execution of the RAG pipeline through:
+
+* tracing
+* feedback functions
+* retrieval analysis
+* faithfulness evaluation
+* relevance evaluation
+* interactive dashboards
+
+The RAG pipeline was wrapped with TruLens instrumentation so that queries, retrieved information and generated responses could be analyzed throughout the execution path.
+
+The thesis reports similarly high evaluation scores, with small differences attributed to the more limited knowledge base used in the notebook evaluation and slight modifications required to instrument the RAG pipeline.
+
+The two approaches therefore serve complementary purposes:
+
+| DeepEval                    | TruLens                       |
+| --------------------------- | ----------------------------- |
+| Automated LLM tests         | Runtime observability         |
+| Reproducible evaluation     | Pipeline tracing              |
+| Metric-based validation     | Retrieval/generation analysis |
+| Regression-oriented testing | Diagnostic analysis           |
+
+---
+
+## Evaluation Results
+
+The recorded evaluation demonstrates strong performance in:
+
+* answer relevance
+* faithfulness to retrieved knowledge
+* contextual retrieval quality
+* consistency across different queries
+
+<p align="center">
+  <img src="screenshots/evaluation.PNG" width="850"/>
+</p>
+
+These results should be interpreted as an **experimental evaluation of the implemented system**, rather than as a clinical validation.
+
+The thesis explicitly identifies limitations of automated **LLM-as-a-Judge** evaluation and highlights human evaluation and testing with real smokers as important directions for future validation.
+
+---
+
+# Firebase & Data Layer
+
+Firebase provides the application's primary cloud infrastructure.
+
+### Firebase Authentication
+
+Supports authenticated user accounts and Google Sign-In.
+
+### Cloud Firestore
+
+Stores application state including user profiles and data related to:
+
+* progress
+* achievements
+* leaderboard
+* friends
+* craving logs
+* daily tips
+* community functionality
+
+### Firebase Cloud Messaging
+
+Provides push notifications and scheduled motivational reminders.
+
+### Real-Time Synchronization
+
+Firestore synchronization enables application data such as leaderboard, community and craving information to update across clients.
+
+Selected information can additionally benefit from local caching for improved availability.
+
+---
+
+# UML & Software Design
+
+The repository contains the UML documentation produced during the design of the system.
+
+```text
+UML/
+├── activity_diagrams.wsd
+├── class_diagram.wsd
+├── component_diagrams.wsd
+├── deployment_diagrams.wsd
+├── er_diagram.wsd
+├── sequence_diagrams.wsd
+└── usecase_diagmram.wsd
+```
+
+The diagrams cover:
+
+* **Use Case Diagrams** — user and system functionality
+* **Activity Diagrams** — application workflows
+* **Sequence Diagrams** — interactions between system components
+* **Class Diagram** — software structure and relationships
+* **ER Diagram** — persistent data model
+* **Component Diagrams** — application and chatbot architecture
+* **Deployment Diagrams** — physical/service deployment
+
+The original PlantUML source files are included to keep the architectural documentation version-controlled alongside the implementation.
 
 ---
 
@@ -376,8 +607,30 @@ This is an important part of the overall implementation: the AI component is tre
 ```text
 Smoking-Cessation-App/
 │
+├── documents/
+│   └── thesis.pdf
+│
+├── screenshots/
+│   ├── home_screen.PNG
+│   ├── questionnaire.PNG
+│   ├── personalized_answers.PNG
+│   ├── beat_cravings.PNG
+│   ├── community_chat.PNG
+│   ├── social.PNG
+│   ├── logs.PNG
+│   ├── evaluation.PNG
+│   └── ...
+│
+├── UML/
+│   ├── activity_diagrams.wsd
+│   ├── class_diagram.wsd
+│   ├── component_diagrams.wsd
+│   ├── deployment_diagrams.wsd
+│   ├── er_diagram.wsd
+│   ├── sequence_diagrams.wsd
+│   └── usecase_diagmram.wsd
+│
 ├── lib/
-│   │
 │   ├── chatbot_backend/
 │   │   ├── main.py
 │   │   ├── langchain_logic.py
@@ -395,104 +648,92 @@ Smoking-Cessation-App/
 │   ├── services/
 │   ├── utils/
 │   ├── widgets/
-│   │
 │   ├── firebase_options.dart
 │   └── main.dart
 │
 ├── assets/
-│   ├── images/
-│   └── audios/
-│
-├── UML/
 ├── pubspec.yaml
-├── pubspec.lock
 ├── LICENSE
 └── README.md
 ```
 
-The repository separates the mobile application into models, providers, screens, services, reusable widgets and utilities, while the AI backend is maintained as a dedicated subsystem.
-
 ---
 
-# Installation & Setup
+# Installation & Development
 
 ## Prerequisites
 
-### Mobile Application
+**Mobile**
 
 * Flutter SDK
 * Dart SDK
-* Android Studio / Xcode
-* Android emulator, iOS simulator or physical device
+* Android Studio or compatible IDE
+* Android emulator / physical device
 * Firebase project
 
-Verify your Flutter environment:
+**AI Backend**
+
+* Python 3.10+
+* `pip`
+* Firebase Admin credentials
+* OpenRouter API credentials
+* Serper API credentials
+* OpenAI API credentials for DeepEval evaluation
+
+Verify Flutter:
 
 ```bash
 flutter doctor
 ```
 
-### AI Backend
-
-* Python 3
-* `pip`
-* Python virtual environment
-* Required API credentials
-* Firebase Admin credentials
-
 ---
 
-## 1. Clone the Repository
+## Clone
 
 ```bash
 git clone https://github.com/Kassaris/Smoking-Cessation-App.git
 cd Smoking-Cessation-App
 ```
 
-## 2. Install Flutter Dependencies
+## Flutter Dependencies
 
 ```bash
 flutter pub get
 ```
 
-## 3. Configure Firebase
+## Firebase
 
-The Flutter application expects a Firebase configuration generated through FlutterFire:
+The Flutter application uses:
 
 ```text
 lib/firebase_options.dart
 ```
 
-Platform-specific Firebase configuration may also be required:
+Platform-specific configuration should be provided locally where required.
 
 ```text
 Android → android/app/google-services.json
 iOS     → ios/Runner/GoogleService-Info.plist
 ```
 
-Firebase service-account credentials and other sensitive configuration should **never be committed to version control**.
+Firebase Admin credentials and private service-account files must **not** be committed to source control.
 
-## 4. Configure the AI Backend
+---
 
-Navigate to:
+## AI Backend
 
 ```bash
 cd lib/chatbot_backend
-```
-
-Create a virtual environment:
-
-```bash
 python -m venv .venv
 ```
 
-Activate it on Linux/macOS:
+Linux/macOS:
 
 ```bash
 source .venv/bin/activate
 ```
 
-or Windows:
+Windows:
 
 ```bash
 .venv\Scripts\activate
@@ -504,56 +745,55 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
-Configure the required credentials through environment variables or a local `.env` file.
-
-Example:
+Configure the required environment variables:
 
 ```env
 OPENROUTER_API_KEY=
 SERPER_API_KEY=
+OPENAI_API_KEY=
 FIREBASE_CREDENTIALS_PATH=
+RAG_LOG_PATH=./logs.jsonl
+DEEPEVAL_OUT=deepeval_report.csv
 ```
 
-> `.env` files, API keys and Firebase service-account credentials must not be committed to the repository.
+> Never commit API keys, `.env` files or Firebase service-account credentials.
 
-## 5. Prepare the Knowledge Base
+---
 
-The backend includes:
+## Prepare the Knowledge Base
 
-```text
-ingest_documents.py
+Run the document-ingestion pipeline to create the local Chroma vector store:
+
+```bash
+python ingest_documents.py
 ```
 
-for processing the source documents used by the retrieval pipeline and creating the vector knowledge base.
+---
 
-Run the ingestion process as required before starting the RAG service.
-
-## 6. Start the Backend
-
-From the chatbot backend directory:
+## Start the Backend
 
 ```bash
 uvicorn main:app --host 0.0.0.0 --port 8000
 ```
 
-The backend exposes:
+The service exposes:
 
 ```text
 GET  /
 POST /chat/
 ```
 
-## 7. Run the Mobile Application
+---
 
-From the project root:
+## Run the Mobile Application
+
+From the repository root:
 
 ```bash
 flutter run
 ```
 
-When running the backend locally, ensure that the Flutter application uses an address reachable from the target device.
-
-For Android Emulator environments, the host machine is commonly accessible through:
+For an Android emulator communicating with a locally hosted backend, the host machine is commonly available through:
 
 ```text
 10.0.2.2
@@ -563,73 +803,93 @@ rather than `localhost`.
 
 ---
 
-# Engineering Highlights
+# Evaluation Workflow
 
-The thesis combines several software engineering and applied AI areas within a single system:
+Generate or collect chatbot interaction logs:
 
-### Mobile Engineering
+```bash
+python create_logs.py
+```
 
-* Cross-platform Flutter development
-* Component-based UI architecture
-* State management
-* Local persistence
-* REST API communication
-* Authentication
-* Push notifications
+Run the automated DeepEval evaluation:
 
-### Cloud & Backend Engineering
+```bash
+python evaluate_with_deepeval.py
+```
 
-* Firebase Authentication
-* Cloud Firestore
-* Firebase Storage
-* Firebase Messaging
-* FastAPI REST services
-* User-specific backend context
-
-### Applied AI
-
-* Retrieval-Augmented Generation
-* Vector databases
-* Semantic embeddings
-* Conversational retrieval
-* User-aware prompt construction
-* Conversation memory
-* LLM API integration
-* Semantic relevance filtering
-* External retrieval fallback
-* Automated response evaluation
-
-### Software Architecture
-
-* Separation of mobile and AI layers
-* Service-oriented backend integration
-* Persistent cloud state
-* Modular Flutter structure
-* Dedicated knowledge-ingestion pipeline
-* Dedicated AI evaluation pipeline
+The resulting report can then be analyzed together with the complementary TruLens evaluation described in the thesis.
 
 ---
 
-# Diploma Thesis
+# Engineering & Research Scope
 
-This repository represents the software implementation developed for a **Diploma Thesis at the National Technical University of Athens (NTUA), School of Electrical and Computer Engineering**.
+This Diploma Thesis covers the complete design and implementation of a non-trivial mobile information system across several engineering domains:
 
-The work combines **mobile health software engineering with modern generative-AI techniques**, with particular emphasis on personalized conversational support and Retrieval-Augmented Generation for the smoking-cessation domain.
+**Mobile Engineering** — Flutter, modular UI development, Provider state management, local persistence and REST integration.
 
-The complete thesis provides the theoretical background, system methodology, implementation details and evaluation.
+**Cloud Engineering** — Firebase Authentication, Firestore, cloud storage, messaging and real-time synchronization.
 
-> 📄 **[Read the full Diploma Thesis (PDF)](PATH_TO_THESIS.pdf)**
+**Backend Engineering** — Python, FastAPI, API design, request validation, external-service integration and logging.
+
+**Applied Generative AI** — LLM integration, RAG, semantic embeddings, vector retrieval, contextual prompt injection, conversational memory and semantic classification.
+
+**AI Evaluation** — LLM-as-a-Judge, DeepEval, TruLens, answer relevance, faithfulness and retrieval-context evaluation.
+
+**Software Design** — requirements analysis, UML modeling, modular architecture, component separation and deployment modeling.
+
+---
+
+# Limitations & Future Work
+
+The system was developed and evaluated as a Diploma Thesis prototype rather than a clinically validated medical product.
+
+Future work identified during the thesis includes:
+
+* evaluation with real smokers and human evaluators
+* broader testing across devices and screen configurations
+* stronger GDPR-oriented consent and privacy controls
+* additional personalization based on craving patterns and emotional state
+* production-grade backend deployment
+* expanded knowledge-base coverage
+* additional authentication mechanisms
+* further performance and scalability testing
+
+---
+
+# Thesis Contribution
+
+The core contribution of this work is the **design, implementation and evaluation of an integrated mobile smoking-cessation platform in which personalization extends across both conventional application functionality and generative AI**.
+
+The system combines behavioral user data, cessation progress, domain-specific knowledge, conversation history, semantic retrieval and LLM generation to provide individualized digital support.
+
+Unlike a standalone chatbot integration, the AI subsystem operates as part of a broader software architecture containing persistent user state, behavioral interventions, gamification, social functionality and measurable cessation progress.
+
+---
+
+## Research Material
+
+📄 **[Full Diploma Thesis](documents/thesis.pdf)**
+📐 **[UML Design Files](UML/)**
+
+The repository contains the implementation, thesis, application screenshots, UML models and AI evaluation tooling developed as part of the project.
 
 ---
 
 ## Disclaimer
 
-This system was developed for research and academic purposes.
+This platform was developed as a **Diploma Thesis and research-oriented software project**.
 
-The application and AI assistant are intended to provide informational and behavioral support and **do not constitute medical advice, diagnosis or treatment**. Generated responses should not replace guidance from qualified healthcare professionals.
+The application and conversational assistant provide informational and behavioral support and **do not constitute medical advice, diagnosis or treatment**.
+
+The reported AI evaluation measures the implemented conversational system under the experimental conditions described in the thesis and should not be interpreted as clinical validation.
 
 ---
 
-**Flutter · Dart · Firebase · Python · FastAPI · LangChain · RAG · Chroma · HuggingFace · DeepSeek**
+<p align="center">
+  <b>Flutter · Dart · Firebase · Python · FastAPI · LangChain · RAG · ChromaDB · HuggingFace · DeepSeek · DeepEval · TruLens</b>
+</p>
 
-*Diploma Thesis — National Technical University of Athens, School of Electrical and Computer Engineering*
+<p align="center">
+  <i>Diploma Thesis — National Technical University of Athens<br>
+  School of Electrical and Computer Engineering</i>
+</p>
